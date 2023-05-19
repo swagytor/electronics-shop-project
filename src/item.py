@@ -1,4 +1,8 @@
 import csv
+from pathlib import Path
+
+PATH_TO_SRC = f'{Path(__file__).parent.parent}/src'
+PATH_TO_CSV = f'{PATH_TO_SRC}/items.csv'
 
 
 class Item:
@@ -28,12 +32,12 @@ class Item:
     @name.setter
     def name(self, name):
         if len(name) > 10:
-            print('Длина наименования товара превышает 10 символов.')
+            raise Exception('Длина наименования товара превышает 10 символов.')
         else:
             self.__name = name
 
     @classmethod
-    def instantiate_from_csv(cls, path='items.csv'):
+    def instantiate_from_csv(cls, path=PATH_TO_CSV):
         with open(path, 'r', encoding='utf-8') as csv_file:
             reader = csv.DictReader(csv_file)
             [Item(**row) for row in reader]
@@ -58,5 +62,5 @@ class Item:
             if number.count('.') == 1:
                 number = float(number)
             return int(number)
-        except:
+        except ValueError:
             return 'Строка не является числом!'
