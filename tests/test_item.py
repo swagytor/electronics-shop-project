@@ -46,3 +46,32 @@ def test_apply_discount(item1, item2):
 
     item2.apply_discount()
     assert item2.price == round(30000 * 0.85, 2)
+
+
+def test_name_setter(item1):
+    item1.name = 'Тостер'
+    assert item1.name == 'Тостер'
+    item1.name = 'Фен'
+    assert item1.name == 'Фен'
+
+
+def test_name_setter__long_word(item2):
+    with pytest.raises(Exception):
+        item2.name = 'Флюгегехаймен'
+    with pytest.raises(Exception):
+        item2.name = 'Аннигиляторная пушка'
+
+
+def test_instantiate_from_csv(item1):
+    Item.instantiate_from_csv()
+    assert len(Item.all) > 1
+
+
+def test_string_to_number():
+    assert Item.string_to_number('5') == 5
+    assert Item.string_to_number('10.2') == 10
+    assert Item.string_to_number('0.5') == 0
+    assert Item.string_to_number('fkjsdfklsdjfkldf') == 'Строка не является числом!'
+    assert Item.string_to_number('2.4.2.3') == 'Строка не является числом!'
+    assert Item.string_to_number('23..0') == 'Строка не является числом!'
+
