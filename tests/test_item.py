@@ -25,24 +25,24 @@ def test_init(item1, item2):
     """Тестирует конструктор Item."""
 
     assert isinstance(item1.name, str)
-    assert isinstance(item1.price, float)
+    assert isinstance(item1.price, int)
     assert isinstance(item1.quantity, int)
 
     assert isinstance(item2.name, str)
-    assert isinstance(item2.price, float)
+    assert isinstance(item2.price, int)
     assert isinstance(item2.quantity, int)
 
 
 def test_calculate_total_price(item1, item2):
     """Тестирует метод calculate_total_price."""
-    assert item1.calculate_total_price() == 19999.9 * 5
+    assert item1.calculate_total_price() == 19999 * 5
     assert item2.calculate_total_price() == 30000 * 2.0
 
 
 def test_apply_discount(item1, item2):
     """Тестирует метод apply_discount."""
     item1.apply_discount()
-    assert item1.price == round(19999.9 * 0.85, 2)
+    assert item1.price == round(19999 * 0.85, 2)
 
     item2.apply_discount()
     assert item2.price == round(30000 * 0.85, 2)
@@ -75,3 +75,7 @@ def test_string_to_number():
     assert Item.string_to_number('2.4.2.3') == 'Строка не является числом!'
     assert Item.string_to_number('23..0') == 'Строка не является числом!'
 
+
+def test_repr_and_str(item1):
+    assert repr(item1) == "Item('Phone', 19999, 5)"
+    assert str(item1) == "Phone"
