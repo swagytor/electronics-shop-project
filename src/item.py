@@ -1,4 +1,8 @@
 import csv
+from pathlib import Path
+
+PATH_TO_SRC = f'{Path(__file__).parent.parent}/src'
+PATH_TO_CSV = f'{PATH_TO_SRC}/items.csv'
 
 
 class Item:
@@ -8,7 +12,7 @@ class Item:
     pay_rate = 0.85
     all = []
 
-    def __init__(self, name: str, price: float, quantity: int) -> None:
+    def __init__(self, name: str, price: int, quantity: int) -> None:
         """
         Создание экземпляра класса item.
 
@@ -17,9 +21,15 @@ class Item:
         :param quantity: Количество товара в магазине.
         """
         self.__name = name
-        self.price = float(price)
+        self.price = int(price)
         self.quantity = int(quantity)
         Item.all.append(self)
+
+    def __repr__(self):
+        return f"{self.__class__.__name__}('{self.__name}', {self.price}, {self.quantity})"
+
+    def __str__(self):
+        return self.__name
 
     @property
     def name(self):
@@ -28,12 +38,12 @@ class Item:
     @name.setter
     def name(self, name):
         if len(name) > 10:
-            print('Длина наименования товара превышает 10 символов.')
+            raise Exception('Длина наименования товара превышает 10 символов.')
         else:
             self.__name = name
 
     @classmethod
-    def instantiate_from_csv(cls, path='items.csv'):
+    def instantiate_from_csv(cls, path=PATH_TO_CSV):
         with open(path, 'r', encoding='utf-8') as csv_file:
             reader = csv.DictReader(csv_file)
             [Item(**row) for row in reader]
@@ -58,5 +68,5 @@ class Item:
             if number.count('.') == 1:
                 number = float(number)
             return int(number)
-        except:
+        except ValueError:
             return 'Строка не является числом!'
