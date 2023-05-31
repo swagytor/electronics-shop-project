@@ -1,4 +1,5 @@
 import csv
+
 from pathlib import Path
 
 PATH_TO_SRC = f'{Path(__file__).parent.parent}/src'
@@ -26,10 +27,14 @@ class Item:
         Item.all.append(self)
 
     def __repr__(self):
-        return f"{self.__class__.__name__}('{self.__name}', {self.price}, {self.quantity})"
+        return f"{self.__class__.__name__}({', '.join([repr(attr) for attr in self.__dict__.values()])})"
 
     def __str__(self):
         return self.__name
+
+    def __add__(self, other):
+        if issubclass(other.__class__, self.__class__):
+            return self.quantity + other.quantity
 
     @property
     def name(self):
@@ -44,6 +49,7 @@ class Item:
 
     @classmethod
     def instantiate_from_csv(cls, path=PATH_TO_CSV):
+        cls.all.clear()
         with open(path, 'r', encoding='utf-8') as csv_file:
             reader = csv.DictReader(csv_file)
             [Item(**row) for row in reader]
